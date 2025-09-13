@@ -114,5 +114,12 @@ namespace Today2.ViewModels
             SelectedDate = SelectedDate.AddDays(-1);
             OnDateChanged();
         }
+
+        public void OpenDatabase() {
+            
+            // This sets the database path.
+            Properties.Settings.Default.LastDatabasePath = @"C:\path\to\database.db";
+            Properties.Settings.Default.Save();
+        }
     }
 }
