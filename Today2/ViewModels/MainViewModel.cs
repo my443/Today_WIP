@@ -14,9 +14,8 @@ namespace Today2.ViewModels
     class MainViewModel : ViewModelBase
     {
         private TodayAction _selectedItem { get; set; }
+        private ObservableCollection<TodayAction> _items;
         private DateTime _selectedDate = DateTime.Now;
-
-        public ObservableCollection<TodayAction> Items { get; set; }
         public TodayAction SelectedItem
         {
             get => _selectedItem;
@@ -44,6 +43,19 @@ namespace Today2.ViewModels
                 }
             }
         }
+
+        public ObservableCollection<TodayAction> Items
+        {
+            get => _items;
+            set
+            {
+                if (_items != value)
+                {
+                    _items = value;
+                    OnPropertyChanged(nameof(Items));
+                }
+            }
+        }
         public ICommand DeleteItemCommand { get; }
         public ICommand AddItemCommand { get; }
         public ICommand DateForwardCommand { get; }
@@ -52,9 +64,9 @@ namespace Today2.ViewModels
         {
             Items = new ObservableCollection<TodayAction>
                 {
-                    new TodayAction { Name = "Buy groceries", IsComplete = false },
-                    new TodayAction { Name = "Finish report", IsComplete = true },
-                    new TodayAction { Name = "Call John", IsComplete = false }
+                    new TodayAction { Name = "Buy groceries", Date = DateTime.Now, IsComplete = false },
+                    new TodayAction { Name = "Finish report", Date = DateTime.Now, IsComplete = true },
+                    new TodayAction { Name = "Call John", Date = DateTime.Now.AddDays(-1), IsComplete = false }
                 };
 
             DeleteItemCommand = new RelayCommand(
@@ -70,7 +82,7 @@ namespace Today2.ViewModels
         }
         public void OnAddItem()
         {
-            var newItem = new TodayAction { Name = "New Task", IsComplete = false };
+            var newItem = new TodayAction { Name = "New Task", Date = DateTime.Now, IsComplete = false };
             Items.Add(newItem);
             SelectedItem = newItem;
         }
@@ -83,19 +95,24 @@ namespace Today2.ViewModels
             }
         }
 
-        public void OnDateChanged(DateTime newDate)
+        public void OnDateChanged()
         {
-            SelectedDate = newDate;
             // Implement any additional logic needed when the date changes
+            var filtered = Items
+                    .Where(item => item.Date.Date == SelectedDate.Date)
+                    .ToList();
+            Items = filtered != null ? new ObservableCollection<TodayAction>(filtered) : new ObservableCollection<TodayAction>();
         }
 
         public void DateForward()
         {
             SelectedDate = SelectedDate.AddDays(1);
+            OnDateChanged();
         }
         public void DateBack()
         {
             SelectedDate = SelectedDate.AddDays(-1);
+            OnDateChanged();
         }
     }
 }
