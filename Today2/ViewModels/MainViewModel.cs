@@ -14,7 +14,7 @@ namespace Today2.ViewModels
     class MainViewModel : ViewModelBase
     {
         private TodayAction _selectedItem { get; set; }
-        private DateOnly _selectedDate = DateOnly.FromDateTime(DateTime.Now);
+        private DateTime _selectedDate = DateTime.Now;
 
         public ObservableCollection<TodayAction> Items { get; set; }
         public TodayAction SelectedItem
@@ -31,7 +31,7 @@ namespace Today2.ViewModels
                 }
             }
         }
-        public DateOnly SelectedDate
+        public DateTime SelectedDate
         {
             get => _selectedDate;
             set
@@ -46,6 +46,8 @@ namespace Today2.ViewModels
         }
         public ICommand DeleteItemCommand { get; }
         public ICommand AddItemCommand { get; }
+        public ICommand DateForwardCommand { get; }
+        public ICommand DateBackCommand { get; }
         public MainViewModel()
         {
             Items = new ObservableCollection<TodayAction>
@@ -61,6 +63,10 @@ namespace Today2.ViewModels
                                 );
 
             AddItemCommand = new RelayCommand(_ => OnAddItem());
+            DateForwardCommand = new RelayCommand(_ => DateForward());
+            DateBackCommand = new RelayCommand(_ => DateBack());
+
+
         }
         public void OnAddItem()
         {
@@ -75,6 +81,21 @@ namespace Today2.ViewModels
             {
                 Items.Remove(SelectedItem);
             }
+        }
+
+        public void OnDateChanged(DateTime newDate)
+        {
+            SelectedDate = newDate;
+            // Implement any additional logic needed when the date changes
+        }
+
+        public void DateForward()
+        {
+            SelectedDate = SelectedDate.AddDays(1);
+        }
+        public void DateBack()
+        {
+            SelectedDate = SelectedDate.AddDays(-1);
         }
     }
 }

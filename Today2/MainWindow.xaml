@@ -54,7 +54,7 @@
                         Width="75"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
-                        Command="{Binding AddItemCommand}">
+                        Command="{Binding DateBackCommand}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Left"
                                 Margin="0">
@@ -76,7 +76,7 @@
                         Width="75"
                         HorizontalAlignment="Stretch"
                         HorizontalContentAlignment="Center"
-                        Command="{Binding AddItemCommand}">
+                        Command="{Binding DateForwardCommand}">
                     <StackPanel Orientation="Horizontal"
                                 HorizontalAlignment="Left"
                                 Margin="0">
