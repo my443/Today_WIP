@@ -10,7 +10,7 @@ namespace Today2.ViewModels
         private TodayAction _selectedItem { get; set; }
         private ObservableCollection<TodayAction> _items;
         private DateTime _selectedDate = DateTime.Now;
-        private AppDbContext _appDbContext;
+        public AppDbContext _appDbContext;
         public TodayAction SelectedItem
         {
             get => _selectedItem;
@@ -19,9 +19,12 @@ namespace Today2.ViewModels
                 if (_selectedItem != value)
                 {
                     _selectedItem = value;
+                    _appDbContext.SaveChanges();
+
                     OnPropertyChanged(nameof(SelectedItem));
+
                     // You can put additional logic here if you want to respond to selection changes
-                    (DeleteItemCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                    (DeleteItemCommand as RelayCommand)?.RaiseCanExecuteChanged();                    
                 }
             }
         }
@@ -59,12 +62,11 @@ namespace Today2.ViewModels
         {
             var factory = new AppDbContextFactory();
             var dbPath = Properties.Settings.Default.LastDatabasePath;
-            
+
             _appDbContext = factory.Create(dbPath);
             _appDbContext.Database.EnsureCreated();
 
-            var actions = _appDbContext.Actions.ToList();
-            Items = new ObservableCollection<TodayAction>(actions);
+            RefreshList();
             //Items = new ObservableCollection<TodayAction>
             //    {
             //        new TodayAction { Name = "Buy groceries", Date = DateTime.Now, IsComplete = false },

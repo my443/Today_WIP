@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Today2.Models;
 using Today2.ViewModels;
@@ -29,5 +30,21 @@ namespace Today2
                 }
             }
         }
+
+        private void DataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+
+            var dataGrid = sender as DataGrid;
+            dataGrid.SelectedItem = e.Row.Item;
+        }
+
+        private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        {
+            // Optionally validate or do something with e.Row.Item
+            // Save changes to the database context
+            var dataGrid = sender as DataGrid;
+            (DataContext as MainViewModel)?._appDbContext.SaveChanges();
+        }
+
     }
 }

@@ -94,6 +94,8 @@
                   HeadersVisibility="Column"
                   IsReadOnly="False"
                   PreviewKeyDown="DataGrid_PreviewKeyDown"
+                  RowEditEnding="DataGrid_RowEditEnding"    
+                  CellEditEnding="DataGrid_CellEditEnding"
                   Margin="10">
 
                 <DataGrid.Columns>
