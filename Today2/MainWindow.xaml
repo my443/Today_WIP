@@ -1,0 +1,118 @@
+﻿<Window x:Class="Today2.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Today2"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" 
+                        HorizontalAlignment="Stretch"
+                        Margin="10,10,10,0">
+                <Button Margin="2" 
+                        Grid.Column="0" 
+                        Width="75"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AddItemCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="0">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontWeight="Bold">
+                            <Run Text="N" TextDecorations="Underline"/>ew</TextBlock>
+                    </StackPanel>
+                    <Button.ToolTip>
+                        Add a new task to the list.
+                    </Button.ToolTip>
+                    <ToolTipService.InitialShowDelay>100</ToolTipService.InitialShowDelay>
+                    <ToolTipService.ShowDuration>3000</ToolTipService.ShowDuration>
+                </Button>
+                <Button Margin="2" 
+                        Grid.Column="0" 
+                        Width="75"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding DeleteItemCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="0">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontWeight="Bold">
+                            <Run Text="D" TextDecorations="Underline"/>elete</TextBlock>
+                    </StackPanel>
+                    <Button.ToolTip>
+                        Delete the selected task from the list.
+                    </Button.ToolTip>
+                    <ToolTipService.InitialShowDelay>100</ToolTipService.InitialShowDelay>
+                    <ToolTipService.ShowDuration>3000</ToolTipService.ShowDuration>
+                </Button>
+                <Button Margin="2" 
+                        Grid.Column="0" 
+                        Width="75"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AddItemCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="0">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontWeight="Bold">
+                            &lt;&lt; </TextBlock>
+                    </StackPanel>
+                </Button>
+
+                <!-- Date Picker -->
+                <DatePicker x:Name="TaskDatePicker"
+                        SelectedDate="{Binding SelectedDate, Mode=TwoWay}"
+                        Margin="0,0,0,10"
+                        Width="200"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Stretch"/>
+                <Button Margin="2" 
+                        Grid.Column="0" 
+                        Width="75"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Center"
+                        Command="{Binding AddItemCommand}">
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Left"
+                                Margin="0">
+                        <TextBlock HorizontalAlignment="Center"
+                                   FontWeight="Bold">
+                            &gt;&gt;</TextBlock>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <DataGrid x:Name="TodoGrid"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                  CanUserAddRows="False"
+                  HeadersVisibility="Column"
+                  IsReadOnly="False"
+                  Margin="10">
+
+                <DataGrid.Columns>
+                    <!-- Checkmark Column -->
+                    <DataGridTemplateColumn Header="Done" Width="60">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsComplete, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
+                    <!-- Text Column -->
+                    <DataGridTextColumn Header="Task"
+                                    Binding="{Binding Name}"
+                                    Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+    </Grid>
+</Window>
