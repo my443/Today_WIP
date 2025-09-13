@@ -30,6 +30,7 @@ namespace Today2.ViewModels
             }
         }
         public ICommand DeleteItemCommand { get; }
+        public ICommand AddItemCommand { get; }
         public MainViewModel()
         {
             Items = new ObservableCollection<TodayAction>
@@ -43,8 +44,10 @@ namespace Today2.ViewModels
                                     execute: _ => DeleteItem(),
                                     canExecute: _ => SelectedItem != null
                                 );
+
+            AddItemCommand = new RelayCommand(_ => OnAddItem());
         }
-        public void OnAddItem(object sender, RoutedEventArgs e)
+        public void OnAddItem()
         {
             Items.Add(new TodayAction { Name = "New Task", IsComplete = false });
         }
