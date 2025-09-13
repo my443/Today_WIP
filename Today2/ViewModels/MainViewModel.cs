@@ -80,8 +80,6 @@ namespace Today2.ViewModels
             AddItemCommand = new RelayCommand(_ => OnAddItem());
             DateForwardCommand = new RelayCommand(_ => DateForward());
             DateBackCommand = new RelayCommand(_ => DateBack());
-
-
         }
         public void OnAddItem()
         {
