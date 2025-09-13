@@ -93,6 +93,7 @@
                   CanUserAddRows="False"
                   HeadersVisibility="Column"
                   IsReadOnly="False"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Margin="10">
 
                 <DataGrid.Columns>

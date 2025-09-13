@@ -14,6 +14,8 @@ namespace Today2.ViewModels
     class MainViewModel : ViewModelBase
     {
         private TodayAction _selectedItem { get; set; }
+        private DateOnly _selectedDate = DateOnly.FromDateTime(DateTime.Now);
+
         public ObservableCollection<TodayAction> Items { get; set; }
         public TodayAction SelectedItem
         {
@@ -26,6 +28,19 @@ namespace Today2.ViewModels
                     OnPropertyChanged(nameof(SelectedItem));
                     // You can put additional logic here if you want to respond to selection changes
                     (DeleteItemCommand as RelayCommand)?.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        public DateOnly SelectedDate
+        {
+            get => _selectedDate;
+            set
+            {
+                if (_selectedDate != value)
+                {
+                    _selectedDate = value;
+                    OnPropertyChanged(nameof(SelectedDate));
+                    // You can put additional logic here if you want to respond to date changes
                 }
             }
         }
@@ -49,7 +64,9 @@ namespace Today2.ViewModels
         }
         public void OnAddItem()
         {
-            Items.Add(new TodayAction { Name = "New Task", IsComplete = false });
+            var newItem = new TodayAction { Name = "New Task", IsComplete = false };
+            Items.Add(newItem);
+            SelectedItem = newItem;
         }
 
         public void DeleteItem()
