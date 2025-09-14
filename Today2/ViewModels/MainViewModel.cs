@@ -10,7 +10,8 @@ namespace Today2.ViewModels
         private TodayAction _selectedItem { get; set; }
         private ObservableCollection<TodayAction> _items;
         private DateTime _selectedDate = DateTime.Now;
-        public AppDbContext _appDbContext;
+        public AppDbContext _appDbContext; 
+
         public TodayAction SelectedItem
         {
             get => _selectedItem;
@@ -28,6 +29,7 @@ namespace Today2.ViewModels
                 }
             }
         }
+
         public DateTime SelectedDate
         {
             get => _selectedDate;
