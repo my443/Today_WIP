@@ -15,6 +15,7 @@ namespace Today2.ViewModels
         private DateTime _selectedDate = DateTime.Now;
         public AppDbContext _appDbContext;
         public IAppDbContextFactory _factory;
+        public string _databasePath;
 
         public TodayAction SelectedItem
         {
@@ -60,6 +61,18 @@ namespace Today2.ViewModels
                 }
             }
         }
+        public string DatabasePath
+        {
+            get => _databasePath;
+            set
+            {
+                if (_databasePath != value)
+                {
+                    _databasePath = value;
+                    OnPropertyChanged(nameof(DatabasePath));
+                }
+            }
+        }
         public ICommand DeleteItemCommand { get; }
         public ICommand AddItemCommand { get; }
         public ICommand DateForwardCommand { get; }
@@ -70,9 +83,9 @@ namespace Today2.ViewModels
         public MainViewModel()
         {
             _factory = new AppDbContextFactory();
-            var dbPath = Properties.Settings.Default.LastDatabasePath;
+            DatabasePath = Properties.Settings.Default.LastDatabasePath;
 
-            ConnectToDatabase(dbPath);
+            ConnectToDatabase(DatabasePath);
 
             //Items = new ObservableCollection<TodayAction>
             //    {
@@ -99,6 +112,7 @@ namespace Today2.ViewModels
             _appDbContext = _factory.Create(dbPath);
             _appDbContext.Database.EnsureCreated();
             SelectedDate = DateTime.Now;
+            DatabasePath = dbPath;
             RefreshList();
         }
 

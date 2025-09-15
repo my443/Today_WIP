@@ -151,5 +151,15 @@
                 </DataGrid.Columns>
             </DataGrid>
         </StackPanel>
+        <StackPanel Grid.Row="3" Grid.ColumnSpan="3">
+            <StatusBar>
+                <StatusBarItem HorizontalAlignment="Left">
+                    <TextBlock Text=""/>
+                </StatusBarItem>
+                <StatusBarItem HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding DatabasePath}"/>
+                </StatusBarItem>
+            </StatusBar>
+        </StackPanel>
     </Grid>
 </Window>
