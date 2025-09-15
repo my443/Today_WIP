@@ -65,6 +65,19 @@ namespace Today2
             }
         }
 
+        private void NewDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new SaveFileDialog
+            {
+                Filter = "SQLite Database (*.db)|*.db|All files (*.*)|*.*",
+                Title = "Create New Database"
+            };
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                ((MainViewModel)DataContext).NewDatabase(saveFileDialog.FileName);
+            }
+        }
+
     }
 
 

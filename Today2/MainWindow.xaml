@@ -22,7 +22,7 @@
         <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
-                    <MenuItem Command="{Binding NewFileCommand}">
+                    <MenuItem Click="NewDatabase_Click">
                         <MenuItem.Header>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="New File"/>

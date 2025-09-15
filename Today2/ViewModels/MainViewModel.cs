@@ -186,8 +186,33 @@ namespace Today2.ViewModels
                     MessageBoxImage.Error
                 );
             }
+        }
 
-
+        public void NewDatabase(string selectedPath)
+        {
+            try
+            {
+                // Just attempt to create or open the database file
+                using (var context = _factory.Create(selectedPath))
+                {
+                    context.Database.EnsureCreated();
+                }
+                // 3. Save to settings if valid
+                Properties.Settings.Default.LastDatabasePath = selectedPath;
+                Properties.Settings.Default.Save();
+                // 4. Reconnect to the new database
+                ConnectToDatabase(selectedPath);
+            }
+            catch (Exception ex)
+            {
+                // Show error message if not a valid database
+                MessageBox.Show(
+                    "Could not create the database file. Error: " + ex.Message,
+                    "Database Error",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
         }
 
 
