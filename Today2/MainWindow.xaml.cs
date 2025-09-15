@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using Microsoft.Win32;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Today2.Models;
@@ -30,14 +31,6 @@ namespace Today2
                 }
             }
         }
-
-        private void DataGrid_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
-        {
-
-            var dataGrid = sender as DataGrid;
-            dataGrid.SelectedItem = e.Row.Item;
-        }
-
         private void DataGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
             if (e.Column is DataGridTextColumn)
@@ -57,6 +50,19 @@ namespace Today2
         private void CheckBox_Checked(object sender, RoutedEventArgs e)
         {
             (DataContext as MainViewModel)?._appDbContext.SaveChanges();
+        }
+
+        private void OpenDatabase_Click(object sender, RoutedEventArgs e)
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "SQLite Database (*.db)|*.db|All files (*.*)|*.*",
+                Title = "Select Database File"
+            };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                ((MainViewModel)DataContext).OpenDatabase(openFileDialog.FileName);
+            }
         }
 
     }

@@ -5,9 +5,43 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Today2"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Today: Focus On Delivering" Height="450" Width="800">
     <Grid>
-        <StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <DockPanel Grid.Row="0" Grid.ColumnSpan="3">
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <MenuItem Command="{Binding NewFileCommand}">
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="New File"/>
+                                <TextBlock Text=" (Ctrl+N)" 
+                                       Foreground="Gray" 
+                                       Margin="5,0,0,0"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
+                    <MenuItem Header="_Open File" Click="OpenDatabase_Click"/>
+                    <Separator />
+
+                    <MenuItem Header="E_xit" Command="{Binding ExitApplicationCommand}"/>
+                </MenuItem>
+
+            </Menu>
+        </DockPanel>
+        
+        <StackPanel Grid.Row="1" Grid.ColumnSpan="3">
             <StackPanel Orientation="Horizontal" 
                         HorizontalAlignment="Stretch"
                         Margin="10,10,10,0">
@@ -92,9 +126,7 @@
                   SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
                   CanUserAddRows="False"
                   HeadersVisibility="Column"
-                  IsReadOnly="False"
-                  PreviewKeyDown="DataGrid_PreviewKeyDown"
-                  RowEditEnding="DataGrid_RowEditEnding"    
+                  IsReadOnly="False" 
                   CellEditEnding="DataGrid_CellEditEnding"
                   Margin="10">
 
@@ -112,7 +144,7 @@
                     </DataGridTemplateColumn>
 
                     <!-- Text Column -->
-                    <DataGridTextColumn Header="Task"
+                    <DataGridTextColumn Header="To Complete"
                                     Binding="{Binding Name}"
                                     Width="*"/>
                 </DataGrid.Columns>

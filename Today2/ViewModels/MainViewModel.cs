@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Win32;
+using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
-using Today2.Models;
 using Today2.Data;
+using Today2.Models;
 
 namespace Today2.ViewModels
 {
@@ -10,7 +13,8 @@ namespace Today2.ViewModels
         private TodayAction _selectedItem { get; set; }
         private ObservableCollection<TodayAction> _items;
         private DateTime _selectedDate = DateTime.Now;
-        public AppDbContext _appDbContext; 
+        public AppDbContext _appDbContext;
+        public IAppDbContextFactory _factory;
 
         public TodayAction SelectedItem
         {
@@ -25,7 +29,7 @@ namespace Today2.ViewModels
                     OnPropertyChanged(nameof(SelectedItem));
 
                     // You can put additional logic here if you want to respond to selection changes
-                    (DeleteItemCommand as RelayCommand)?.RaiseCanExecuteChanged();                    
+                    (DeleteItemCommand as RelayCommand)?.RaiseCanExecuteChanged();
                 }
             }
         }
@@ -60,15 +64,16 @@ namespace Today2.ViewModels
         public ICommand AddItemCommand { get; }
         public ICommand DateForwardCommand { get; }
         public ICommand DateBackCommand { get; }
+
+        public ICommand NewDatabaseCommand { get; }
+        public ICommand ExitApplicationCommand { get; }
         public MainViewModel()
         {
-            var factory = new AppDbContextFactory();
+            _factory = new AppDbContextFactory();
             var dbPath = Properties.Settings.Default.LastDatabasePath;
 
-            _appDbContext = factory.Create(dbPath);
-            _appDbContext.Database.EnsureCreated();
+            ConnectToDatabase(dbPath);
 
-            RefreshList();
             //Items = new ObservableCollection<TodayAction>
             //    {
             //        new TodayAction { Name = "Buy groceries", Date = DateTime.Now, IsComplete = false },
@@ -84,7 +89,19 @@ namespace Today2.ViewModels
             AddItemCommand = new RelayCommand(_ => OnAddItem());
             DateForwardCommand = new RelayCommand(_ => DateForward());
             DateBackCommand = new RelayCommand(_ => DateBack());
+            //OpenDatabaseCommand = new RelayCommand(_ => OpenDatabase());
+            NewDatabaseCommand = new RelayCommand(_ => { /* Implement new database logic here */ });
+            ExitApplicationCommand = new RelayCommand(_ => ExitApplication(null));
         }
+
+        private void ConnectToDatabase(string dbPath)
+        {
+            _appDbContext = _factory.Create(dbPath);
+            _appDbContext.Database.EnsureCreated();
+            SelectedDate = DateTime.Now;
+            RefreshList();
+        }
+
         public void OnAddItem()
         {
             var newItem = new TodayAction { Name = "New Task", Date = SelectedDate, IsComplete = false };
@@ -124,12 +141,54 @@ namespace Today2.ViewModels
             RefreshList();
         }
 
-        public void OpenDatabase()
-        {
+        //public void OpenDatabase()
+        //{
 
-            // This sets the database path.
-            Properties.Settings.Default.LastDatabasePath = @"C:\path\to\database.db";
-            Properties.Settings.Default.Save();
+        //    // This sets the database path.
+        //    Properties.Settings.Default.LastDatabasePath = @"C:\path\to\database.db";
+        //    Properties.Settings.Default.Save();
+        //}
+
+        public void OpenDatabase(string selectedPath)
+        {
+            try
+            {
+                using (var context = _factory.Create(selectedPath))
+                {
+                    // Trigger a simple query to validate schema
+
+                    var canConnect = context.Database.CanConnect();
+                    if (!canConnect)
+                        throw new Exception("Database is not accessible.");
+
+                    // Optional: Check for a required table
+                    context.Actions.FirstOrDefault();
+                }
+
+                // 3. Save to settings if valid
+                Properties.Settings.Default.LastDatabasePath = selectedPath;
+                Properties.Settings.Default.Save();
+                // 4. Reconnect to the new database
+                ConnectToDatabase(selectedPath);
+            }
+            catch
+            {
+                // Show error message if not a valid database
+                MessageBox.Show(
+                    "The selected file is not a valid database for this application.",
+                    "Invalid Database",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+
+
+        }
+
+
+        private void ExitApplication(object obj)
+        {
+            System.Windows.Application.Current.Shutdown();
         }
     }
 }
