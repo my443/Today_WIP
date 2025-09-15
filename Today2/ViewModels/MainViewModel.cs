@@ -44,6 +44,7 @@ namespace Today2.ViewModels
                 {
                     _selectedDate = value;
                     OnPropertyChanged(nameof(SelectedDate));
+                    RefreshList();
                     // You can put additional logic here if you want to respond to date changes
                 }
             }
