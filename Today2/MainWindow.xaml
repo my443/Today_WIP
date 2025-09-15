@@ -128,6 +128,7 @@
                   HeadersVisibility="Column"
                   IsReadOnly="False" 
                   CellEditEnding="DataGrid_CellEditEnding"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Margin="10">
 
                 <DataGrid.Columns>

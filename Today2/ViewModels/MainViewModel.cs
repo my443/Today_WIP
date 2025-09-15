@@ -117,6 +117,11 @@ namespace Today2.ViewModels
             {
                 _appDbContext.Actions.Remove(SelectedItem);
                 _appDbContext.SaveChanges();
+                // Remove from UI collection (assuming ActionsList is your ObservableCollection)
+                Items.Remove(SelectedItem);
+
+                // Optionally, set SelectedItem to null
+                SelectedItem = null;
             }
             RefreshList();
         }
